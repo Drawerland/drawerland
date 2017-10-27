@@ -11,7 +11,8 @@ var drawerland = drawerland || {};
         this.canvas.height = height || 800;
         createjs.Stage.call(this, this.canvas);
 
-        this.map = new HexagonalMap(60, 16, 16);
+        this.distance = 60;
+        this.map = new HexagonalMap(this.distance, 16, 16);
         this.character = new Character();
         this.character.moveToHexagon(this.map.hexagons[15]);
         this.addShapes(this.map.hexagons.concat([this.map, this.character]));
@@ -20,8 +21,10 @@ var drawerland = drawerland || {};
         var self = this;
         this.map.hexagons.forEach(function(hexagon){
             hexagon.addEventListener('click', function(){
-                self.character.moveToHexagon(hexagon);
-                self.update();
+                if(self.isXAdjacent(hexagon) && self.isYAdjacent(hexagon)) {
+                    self.character.moveToHexagon(hexagon);
+                    self.update();
+                }
             });
         });
     }
@@ -38,5 +41,37 @@ var drawerland = drawerland || {};
         shapes.forEach(function(shape){
             self.addChild(shape);
         });
-    }
+    };
+
+    Game.prototype.isXAdjacent = function(hexagon){
+        if (hexagon.x > this.character.x) {
+            if((hexagon.x - this.character.x) < this.distance) {
+                return true;
+            }
+        }
+
+        if (hexagon.x < this.character.x) {
+            if((this.character.x - hexagon.x) < this.distance) {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
+    Game.prototype.isYAdjacent = function(hexagon){
+        if (hexagon.y > this.character.y) {
+            if((hexagon.y - this.character.y) < this.distance) {
+                return true;
+            }
+        }
+
+        if (hexagon.y < this.character.y) {
+            if((this.character.y - hexagon.y) < this.distance) {
+                return true;
+            }
+        }
+
+        return false;
+    };
 })();
