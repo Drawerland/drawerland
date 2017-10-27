@@ -21,7 +21,7 @@ var drawerland = drawerland || {};
         var self = this;
         this.map.hexagons.forEach(function(hexagon){
             hexagon.addEventListener('click', function(){
-                if(self.isXAdjacent(hexagon) && self.isYAdjacent(hexagon)) {
+                if(self.isXAdjacent(hexagon) || self.isYAdjacent(hexagon)) {
                     self.character.moveToHexagon(hexagon);
                     self.update();
                 }
@@ -50,7 +50,7 @@ var drawerland = drawerland || {};
             }
         }
 
-        if (hexagon.x < this.character.x) {
+        if (hexagon.x <= this.character.x) {
             if((this.character.x - hexagon.x) < this.distance) {
                 return true;
             }
@@ -66,7 +66,7 @@ var drawerland = drawerland || {};
             }
         }
 
-        if (hexagon.y < this.character.y) {
+        if (hexagon.y <= this.character.y) {
             if((this.character.y - hexagon.y) < this.distance) {
                 return true;
             }
