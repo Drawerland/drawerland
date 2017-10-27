@@ -4,13 +4,14 @@ var drawerland = drawerland || {};
     var Hexagon = drawerland.Hexagon;
 
     function HexagonalMap(distance, lengthX, lengthY, offsetX, offsetY){
+        createjs.Shape.call(this);
         this.distance = distance || 60;
         this.lengthX = lengthX || 8;
         this.lengthY = lengthY || 8;
         this.offsetX = offsetX || 0;
         this.offsetY = offsetY || 0;
 
-        this.shapes = [this];
+        this.hexagons = [];
         this.drawShape();
     }
 
@@ -18,15 +19,15 @@ var drawerland = drawerland || {};
     HexagonalMap.prototype.constructor = HexagonalMap;
 
     HexagonalMap.prototype.getWidth = function(){
-        return this.shapes.length === 0
+        return this.hexagons.length === 0
             ? 0
-            : this.shapes[this.shapes.length-1].x + this.getOffsetX();
+            : this.hexagons[this.hexagons.length-1].x + this.getOffsetX();
     };
 
     HexagonalMap.prototype.getHeight = function(){
-        return this.shapes.length === 0
+        return this.hexagons.length === 0
             ? 0
-            : this.shapes[this.shapes.length-1].y + this.getOffsetY();
+            : this.hexagons[this.hexagons.length-1].y + this.getOffsetY();
     };
 
     HexagonalMap.prototype.getOffsetX = function(){
@@ -41,7 +42,7 @@ var drawerland = drawerland || {};
         for (var y=0; y < this.lengthY; y++) {
             var roundedHalfY = Math.floor(y/2);
             for (var x=-roundedHalfY; x < -roundedHalfY+this.lengthX; x++) {
-                this.shapes.push(new Hexagon(x, y, this.distance, this.getOffsetX(), this.getOffsetY()));
+                this.hexagons.push(new Hexagon(x, y, this.distance, this.getOffsetX(), this.getOffsetY()));
             }
         }
 
