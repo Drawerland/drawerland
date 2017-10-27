@@ -16,13 +16,22 @@ var drawerland = drawerland || {};
         this.character = new Character();
         this.character.moveToHexagon(this.map.hexagons[15]);
         this.addShapes(this.map.hexagons.concat([this.map, this.character]));
+        this.getAdjacentHexagons(this.character).forEach(function(hexagon){
+            hexagon.setAdjacent(true);
+        });
         this.update();
 
         var self = this;
         this.map.hexagons.forEach(function(hexagon){
             hexagon.addEventListener('click', function(){
-                if(self.isXAdjacent(hexagon) || self.isYAdjacent(hexagon)) {
+                if (hexagon.adjacent) {
+                    self.getAdjacentHexagons(self.character).forEach(function(hexagon){
+                        hexagon.setAdjacent(false);
+                    });
                     self.character.moveToHexagon(hexagon);
+                    self.getAdjacentHexagons(self.character).forEach(function(hexagon){
+                        hexagon.setAdjacent(true);
+                    });
                     self.update();
                 }
             });
@@ -43,35 +52,17 @@ var drawerland = drawerland || {};
         });
     };
 
-    Game.prototype.isXAdjacent = function(hexagon){
-        if (hexagon.x > this.character.x) {
-            if((hexagon.x - this.character.x) < this.distance) {
-                return true;
-            }
-        }
-
-        if (hexagon.x <= this.character.x) {
-            if((this.character.x - hexagon.x) < this.distance) {
-                return true;
-            }
-        }
-
-        return false;
+    Game.prototype.getAdjacentHexagons = function(shape){
+        var self = this;
+        return this.map.hexagons.filter(function(hexagon){
+            return self.isAdjacent(shape, hexagon);
+        });
     };
 
-    Game.prototype.isYAdjacent = function(hexagon){
-        if (hexagon.y > this.character.y) {
-            if((hexagon.y - this.character.y) < this.distance) {
-                return true;
-            }
-        }
-
-        if (hexagon.y <= this.character.y) {
-            if((this.character.y - hexagon.y) < this.distance) {
-                return true;
-            }
-        }
-
-        return false;
+    Game.prototype.isAdjacent = function(shape, hexagon){
+        return hexagon.x >= (shape.x - this.distance -1 )
+            && hexagon.x <= (shape.x + this.distance +1 )
+            && hexagon.y >= (shape.y - this.distance -1 )
+            && hexagon.y <= (shape.y + this.distance +1 );
     };
 })();
