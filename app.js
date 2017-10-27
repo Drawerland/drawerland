@@ -34,8 +34,8 @@
                 ? 'white'
                 : 'blue'
             : this.repereY % 2
-                ? 'black'
-                : 'red';
+                ? 'red'
+                : 'green';
 
         this.graphics
             .beginFill(color)
@@ -70,7 +70,7 @@
         element.appendChild(this.canvas);
     };
 
-    document.addEventListener("DOMContentLoaded", function(event) {
+    document.addEventListener("DOMContentLoaded", function() {
         var map = new HexagonalMap(800, 800, 60, 12, 12);
         map.attach(document.body);
         map.update();
