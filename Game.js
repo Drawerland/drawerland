@@ -60,7 +60,8 @@ var drawerland = drawerland || {};
     };
 
     Game.prototype.isAdjacent = function(shape, hexagon){
-        return hexagon.x >= (shape.x - this.distance -1 )
+        return (shape.x !== hexagon.x || shape.y !== hexagon.y)
+            && hexagon.x >= (shape.x - this.distance -1 )
             && hexagon.x <= (shape.x + this.distance +1 )
             && hexagon.y >= (shape.y - this.distance -1 )
             && hexagon.y <= (shape.y + this.distance +1 );
