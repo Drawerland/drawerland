@@ -18,10 +18,8 @@ var drawerland = drawerland || {};
         this.character = new Character(this.grid, 0, 0);
         this.map = new HexagonalMap(this.grid);
 
-
-        this.addShapes([this.map]);
-        this.addShapes(this.map.hexagons);
-        this.addShapes([this.character]);
+        this.addChild(this.map);
+        this.addChild(this.character);
 
         this.setCharacterAdjacent(true);
         this.update();
@@ -49,12 +47,5 @@ var drawerland = drawerland || {};
             .forEach(function(hexagon){
                 hexagon.setAdjacent(adjacent);
             });
-    };
-
-    Game.prototype.addShapes = function(shapes){
-        var self = this;
-        shapes.forEach(function(shape){
-            self.addChild(shape);
-        });
     };
 })();

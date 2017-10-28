@@ -5,14 +5,15 @@ var drawerland = drawerland || {};
     var math = drawerland.math;
 
     function HexagonalMap(grid){
-        createjs.Shape.call(this);
+        createjs.Container.call(this);
         this.grid = grid;
+        //@TODO we should be able to use this.children (from Container) instead of our own hexagons array
         this.hexagons = [];
+        this.debug = false;
         this.drawShape();
     }
 
-    //TODO map should inherit from createjs.Container.prototype
-    HexagonalMap.prototype = Object.create(createjs.Shape.prototype);
+    HexagonalMap.prototype = Object.create(createjs.Container.prototype);
     HexagonalMap.prototype.constructor = HexagonalMap;
 
     HexagonalMap.prototype.getWidth = function(){
@@ -52,13 +53,31 @@ var drawerland = drawerland || {};
     HexagonalMap.prototype.drawShape = function(){
         for (var i=0; i < this.grid.lengthX * this.grid.lengthY; i++){
             var gridCoord = math.indexToGrid(i, this.grid.lengthX);
-            this.hexagons.push(new Hexagon(this.grid, gridCoord.x, gridCoord.y));
+            var hexagon = new Hexagon(this.grid, gridCoord.x, gridCoord.y);
+            this.hexagons.push(hexagon);
+            this.addChild(hexagon);
+
+            if(this.debug){
+                this.drawHexagonDebug(i, hexagon);
+            }
         }
 
-        this.graphics
+        var layout = new createjs.Shape();
+
+        layout.graphics
             .beginStroke("#000")
             .drawRoundRect(0, 0, this.getWidth(), this.getHeight(), 5)
             .endStroke()
         ;
+
+        this.addChild(layout);
+    };
+
+    HexagonalMap.prototype.drawHexagonDebug = function(index, hexagon){
+        var debugString = '#' + index + ':' + hexagon.gridX + ',' + hexagon.gridY;
+        var debugText = new createjs.Text(debugString, "12px Arial", "#ff7700");
+        debugText.x = hexagon.x - 27;
+        debugText.y = hexagon.y - 10;
+        this.addChild(debugText);
     };
 })();
