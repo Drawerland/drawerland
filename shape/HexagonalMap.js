@@ -29,15 +29,12 @@ var drawerland = drawerland || {};
 
     HexagonalMap.prototype.getAdjacentHexagons = function(gridShape){
         var adjacents = [];
-        var hexagon = this.getGridHexagon(gridShape.gridX, gridShape.gridY);
-        if (hexagon !== null) {
-            for (var edge = 0; edge < 6; edge++) {
-                var adjacentCoord = hexagon.getGridAdjacent(edge);
-                if(adjacentCoord) {
-                    var adjacentHexagon = this.getGridHexagon(adjacentCoord.x, adjacentCoord.y);
-                    if (adjacentHexagon !== null) {
-                        adjacents.push(adjacentHexagon);
-                    }
+        for (var edge = 0; edge < 6; edge++) {
+            var adjacentCoord = gridShape.getGridAdjacent(edge);
+            if(adjacentCoord !== null) {
+                var adjacentHexagon = this.getGridHexagon(adjacentCoord.x, adjacentCoord.y);
+                if (adjacentHexagon !== null) {
+                    adjacents.push(adjacentHexagon);
                 }
             }
         }
