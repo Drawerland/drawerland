@@ -2,19 +2,16 @@ var drawerland = drawerland || {};
 
 (function() {
     drawerland.Character = Character;
-    function Character(){
-        createjs.Shape.call(this);
+    var AbstractGridShape = drawerland.AbstractGridShape;
+
+    function Character(grid, gridX, gridY){
+        AbstractGridShape.call(this, grid, gridX, gridY);
+        this.moveTo(this.gridX, this.gridY);
         this.drawShape();
     }
 
-    Character.prototype = new createjs.Shape();
+    Character.prototype = Object.create(AbstractGridShape.prototype);
     Character.prototype.constructor = Character;
-
-    Character.prototype.moveToHexagon = function(hexagon) {
-        this.x = hexagon.x;
-        this.y = hexagon.y;
-        this.drawShape();
-    };
 
     Character.prototype.drawShape = function() {
         this.graphics

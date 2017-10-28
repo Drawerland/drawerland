@@ -2,53 +2,65 @@ var drawerland = drawerland || {};
 (function(){
     drawerland.HexagonalMap = HexagonalMap;
     var Hexagon = drawerland.Hexagon;
+    var math = drawerland.math;
 
-    function HexagonalMap(distance, lengthX, lengthY, offsetX, offsetY){
+    function HexagonalMap(grid){
         createjs.Shape.call(this);
-        this.distance = distance || 60;
-        this.lengthX = lengthX || 8;
-        this.lengthY = lengthY || 8;
-        this.offsetX = offsetX || 0;
-        this.offsetY = offsetY || 0;
-
+        this.grid = grid;
         this.hexagons = [];
         this.drawShape();
     }
 
-    HexagonalMap.prototype = new createjs.Shape();
+    //TODO map should inherit from createjs.Container.prototype
+    HexagonalMap.prototype = Object.create(createjs.Shape.prototype);
     HexagonalMap.prototype.constructor = HexagonalMap;
 
     HexagonalMap.prototype.getWidth = function(){
         return this.hexagons.length === 0
             ? 0
-            : this.hexagons[this.hexagons.length-1].x + this.getOffsetX();
+            : this.hexagons[this.hexagons.length-1].x + this.grid.offsetX;
     };
 
     HexagonalMap.prototype.getHeight = function(){
         return this.hexagons.length === 0
             ? 0
-            : this.hexagons[this.hexagons.length-1].y + this.getOffsetY();
+            : this.hexagons[this.hexagons.length-1].y + this.grid.offsetY;
     };
 
-    HexagonalMap.prototype.getOffsetX = function(){
-        return this.distance/Math.sqrt(3);
+    HexagonalMap.prototype.getAdjacentHexagons = function(gridShape){
+        var adjacents = [];
+        var hexagon = this.getGridHexagon(gridShape.gridX, gridShape.gridY);
+        if (hexagon !== null) {
+            for (var edge = 0; edge < 6; edge++) {
+                var adjacentCoord = hexagon.getGridAdjacent(edge);
+                if(adjacentCoord) {
+                    var adjacentHexagon = this.getGridHexagon(adjacentCoord.x, adjacentCoord.y);
+                    if (adjacentHexagon !== null) {
+                        adjacents.push(adjacentHexagon);
+                    }
+                }
+            }
+        }
+        return adjacents;
     };
 
-    HexagonalMap.prototype.getOffsetY = function(){
-        return this.distance/Math.sqrt(3);
+    HexagonalMap.prototype.getGridHexagon = function(gridX, gridY){
+        var index = math.gridToIndex(gridX, gridY, this.grid.lengthX);
+        if (index >= 0 && typeof this.hexagons[index] !== 'undefined') {
+            return this.hexagons[index];
+        }
+        return null;
     };
 
     HexagonalMap.prototype.drawShape = function(){
-        for (var y=0; y < this.lengthY; y++) {
-            var roundedHalfY = Math.floor(y/2);
-            for (var x=-roundedHalfY; x < -roundedHalfY+this.lengthX; x++) {
-                this.hexagons.push(new Hexagon(x, y, this.distance, this.getOffsetX(), this.getOffsetY()));
-            }
+        for (var i=0; i < this.grid.lengthX * this.grid.lengthY; i++){
+            var gridCoord = math.indexToGrid(i, this.grid.lengthX);
+            this.hexagons.push(new Hexagon(this.grid, gridCoord.x, gridCoord.y));
         }
 
         this.graphics
             .beginStroke("#000")
-            .drawRoundRect(this.offsetX, this.offsetY, this.getWidth(), this.getHeight(), 5)
+            .drawRoundRect(0, 0, this.getWidth(), this.getHeight(), 5)
             .endStroke()
         ;
     };
