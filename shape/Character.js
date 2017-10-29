@@ -1,16 +1,16 @@
 var drawerland = drawerland || {};
 
-(function() {
+(function(Shape) {
     drawerland.Character = Character;
 
     function Character(position){
-        createjs.Shape.call(this);
+        Shape.call(this);
         this.position = position;
         this.moveTo(this.position);
         this.drawShape();
     }
 
-    Character.prototype = Object.create(createjs.Shape.prototype);
+    Character.prototype = Object.create(Shape.prototype);
     Character.prototype.constructor = Character;
 
     Character.prototype.drawShape = function() {
@@ -26,4 +26,4 @@ var drawerland = drawerland || {};
         this.x = pixelCoordinates.x;
         this.y = pixelCoordinates.y;
     };
-})();
+})(createjs.Shape);

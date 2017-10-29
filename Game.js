@@ -17,8 +17,12 @@ var drawerland = drawerland || {};
 
         this.grid = new Grid(lengthX || 16, lengthY || 16, distance || 60);
 
-        var rockDecoration = new Decoration(Decoration.types.IMAGE, 'asset/rock_60x60.jpg');
+        var rockDecoration = new Decoration(this.grid, Decoration.types.IMAGE, 'asset/rock_60x60.jpg');
         var mapDescriptor = {
+            '0,1': {
+                'decoration': rockDecoration,
+                'blocking': true
+            },
             '0,2': {
                 'decoration': rockDecoration,
                 'blocking': true
@@ -27,7 +31,7 @@ var drawerland = drawerland || {};
                 'decoration': rockDecoration,
                 'blocking': true
             },
-            '1,4': {
+            '0,4': {
                 'decoration': rockDecoration,
                 'blocking': true
             }
@@ -35,7 +39,7 @@ var drawerland = drawerland || {};
         this.character = new Character(new GridPosition(this.grid, 0, 0));
         this.map = new Map(
             this.grid,
-            new Decoration(Decoration.types.IMAGE, 'asset/grass_60x60.jpg'),
+            new Decoration(this.grid, Decoration.types.IMAGE, 'asset/grass_60x60.jpg'),
             mapDescriptor
         );
 
@@ -56,7 +60,7 @@ var drawerland = drawerland || {};
         });
     }
 
-    Game.prototype = Object.create(createjs.Stage.prototype);
+    Game.prototype = Object.create(Stage.prototype);
     Game.prototype.constructor = Game;
 
     Game.prototype.attach = function(element){
@@ -69,4 +73,4 @@ var drawerland = drawerland || {};
                 box.setAdjacent(adjacent);
             });
     };
-})();
+})(createjs.Stage);

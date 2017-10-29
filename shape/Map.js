@@ -1,19 +1,19 @@
 var drawerland = drawerland || {};
-(function(){
+(function(Shape, Container){
     drawerland.Map = Map;
     var GridPosition = drawerland.GridPosition;
     var Box = drawerland.Box;
     var math = drawerland.math;
 
     function Map(grid, defaultDecoration, descriptor){
-        createjs.Container.call(this);
+        Container.call(this);
         this.grid = grid;
         this.defaultDecoration = defaultDecoration;
         this.descriptor = descriptor || {};
         this.drawShape();
     }
 
-    Map.prototype = Object.create(createjs.Container.prototype);
+    Map.prototype = Object.create(Container.prototype);
     Map.prototype.constructor = Map;
 
     Map.prototype.getWidth = function(){
@@ -72,7 +72,7 @@ var drawerland = drawerland || {};
             );
         }
 
-        var layout = new createjs.Shape();
+        var layout = new Shape();
 
         layout.graphics
             .beginStroke("#000")
@@ -90,4 +90,4 @@ var drawerland = drawerland || {};
     //     debugText.y = box.y - 10;
     //     this.addChild(debugText);
     // };
-})();
+})(createjs.Shape, createjs.Container);

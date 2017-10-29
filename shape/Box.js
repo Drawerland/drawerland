@@ -1,10 +1,10 @@
 var drawerland = drawerland || {};
 
-(function(){
+(function(Shape, Graphics){
     drawerland.Box = Box;
 
     function Box(position, description) {
-        createjs.Shape.call(this);
+        Shape.call(this);
         this.position = position;
         var pixelCoordinates = this.position.getPixelCoordinates();
         this.x = pixelCoordinates.x;
@@ -15,7 +15,7 @@ var drawerland = drawerland || {};
         this.drawShape();
     }
 
-    Box.prototype = Object.create(createjs.Shape.prototype);
+    Box.prototype = Object.create(Shape.prototype);
     Box.prototype.constructor = Box;
 
     Box.prototype.setAdjacent = function(adjacent){
@@ -25,17 +25,19 @@ var drawerland = drawerland || {};
 
     Box.prototype.drawShape = function()
     {
+        //@TODO optionnal centered debug of positions on the center of each Boxes        ;
         this.decoration.decorate(this.graphics)
-            .beginStroke(createjs.Graphics.getRGB(0,0,0))
-            .drawPolyStar(0,0, this.position.grid.distance / Math.sqrt(3), 6, 0, 30)
-            .endStroke();
+            .beginStroke(Graphics.getRGB(0,0,0))
+            .drawPolyStar(0,0, this.position.grid.offsetX, 6, 0, 30)
+            .endStroke()
+            .endFill();
 
 
         if(this.adjacent && !this.blocking){
             this.graphics
-                .beginFill(createjs.Graphics.getRGB(200,200,200, 0.40))
-                .drawPolyStar(0,0, this.position.grid.distance / Math.sqrt(3), 6, 0, 30)
+                .beginFill(Graphics.getRGB(200,200,200, 0.40))
+                .drawPolyStar(0,0, this.position.grid.offsetX, 6, 0, 30)
                 .endFill();
         }
     };
-})();
+})(createjs.Shape, createjs.Graphics);
