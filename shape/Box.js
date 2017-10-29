@@ -3,14 +3,15 @@ var drawerland = drawerland || {};
 (function(){
     drawerland.Box = Box;
 
-    function Box(position, decoration) {
+    function Box(position, description) {
         createjs.Shape.call(this);
         this.position = position;
         var pixelCoordinates = this.position.getPixelCoordinates();
         this.x = pixelCoordinates.x;
         this.y = pixelCoordinates.y;
-        this.decoration = decoration;
+        this.decoration = description.decoration;
         this.adjacent = false;
+        this.blocking = description.blocking || false;
         this.drawShape();
     }
 
@@ -30,7 +31,7 @@ var drawerland = drawerland || {};
             .endStroke();
 
 
-        if(this.adjacent){
+        if(this.adjacent && !this.blocking){
             this.graphics
                 .beginFill(createjs.Graphics.getRGB(200,200,200, 0.40))
                 .drawPolyStar(0,0, this.position.grid.distance / Math.sqrt(3), 6, 0, 30)

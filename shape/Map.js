@@ -5,11 +5,11 @@ var drawerland = drawerland || {};
     var Box = drawerland.Box;
     var math = drawerland.math;
 
-    function Map(grid, defaultDecoration, decorations){
+    function Map(grid, defaultDecoration, descriptor){
         createjs.Container.call(this);
         this.grid = grid;
         this.defaultDecoration = defaultDecoration;
-        this.decorations = decorations || [];
+        this.descriptor = descriptor || {};
         this.drawShape();
     }
 
@@ -42,6 +42,16 @@ var drawerland = drawerland || {};
         return adjacents;
     };
 
+    Map.prototype.getDescription = function(gridX, gridY){
+        var key = gridX+','+gridY;
+        if(typeof this.descriptor[key] !== 'undefined'){
+            return this.descriptor[key];
+        }
+        return {
+          'decoration': this.defaultDecoration
+        };
+    };
+
     Map.prototype.getGridBox = function(gridX, gridY){
         var index = math.gridToIndex(gridX, gridY, this.grid.lengthX);
         if (index >= 0 && typeof this.children[index] !== 'undefined') {
@@ -53,10 +63,11 @@ var drawerland = drawerland || {};
     Map.prototype.drawShape = function(){
         for (var i=0; i < this.grid.lengthX * this.grid.lengthY; i++){
             var gridCoord = math.indexToGrid(i, this.grid.lengthX);
+            var description = this.getDescription(gridCoord.x, gridCoord.y);
             this.addChild(
                 new Box(
                     new GridPosition(this.grid, gridCoord.x, gridCoord.y),
-                    this.defaultDecoration
+                    description
                 )
             );
         }
