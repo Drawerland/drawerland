@@ -5,9 +5,11 @@ var drawerland = drawerland || {};
     var Box = drawerland.Box;
     var math = drawerland.math;
 
-    function Map(grid){
+    function Map(grid, defaultDecoration, decorations){
         createjs.Container.call(this);
         this.grid = grid;
+        this.defaultDecoration = defaultDecoration;
+        this.decorations = decorations || [];
         this.drawShape();
     }
 
@@ -53,7 +55,8 @@ var drawerland = drawerland || {};
             var gridCoord = math.indexToGrid(i, this.grid.lengthX);
             this.addChild(
                 new Box(
-                    new GridPosition(this.grid, gridCoord.x, gridCoord.y)
+                    new GridPosition(this.grid, gridCoord.x, gridCoord.y),
+                    this.defaultDecoration
                 )
             );
         }

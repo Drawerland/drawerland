@@ -3,13 +3,13 @@ var drawerland = drawerland || {};
 (function(){
     drawerland.Box = Box;
 
-    function Box(position, color) {
+    function Box(position, decoration) {
         createjs.Shape.call(this);
         this.position = position;
         var pixelCoordinates = this.position.getPixelCoordinates();
         this.x = pixelCoordinates.x;
         this.y = pixelCoordinates.y;
-        this.color = color || 'white';
+        this.decoration = decoration;
         this.adjacent = false;
         this.drawShape();
     }
@@ -24,10 +24,17 @@ var drawerland = drawerland || {};
 
     Box.prototype.drawShape = function()
     {
-        this.graphics
-            .beginFill(this.adjacent ? 'blue' : this.color)
+        this.decoration.decorate(this.graphics)
             .beginStroke(createjs.Graphics.getRGB(0,0,0))
             .drawPolyStar(0,0, this.position.grid.distance / Math.sqrt(3), 6, 0, 30)
-            .endFill();
+            .endStroke();
+
+
+        if(this.adjacent){
+            this.graphics
+                .beginFill(createjs.Graphics.getRGB(200,200,200, 0.40))
+                .drawPolyStar(0,0, this.position.grid.distance / Math.sqrt(3), 6, 0, 30)
+                .endFill();
+        }
     };
 })();
