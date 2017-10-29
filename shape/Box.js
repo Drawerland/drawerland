@@ -1,9 +1,9 @@
 var drawerland = drawerland || {};
 
 (function(){
-    drawerland.Hexagon = Hexagon;
+    drawerland.Box = Box;
 
-    function Hexagon(position, color) {
+    function Box(position, color) {
         createjs.Shape.call(this);
         this.position = position;
         var pixelCoordinates = this.position.getPixelCoordinates();
@@ -14,15 +14,15 @@ var drawerland = drawerland || {};
         this.drawShape();
     }
 
-    Hexagon.prototype = Object.create(createjs.Shape.prototype);
-    Hexagon.prototype.constructor = Hexagon;
+    Box.prototype = Object.create(createjs.Shape.prototype);
+    Box.prototype.constructor = Box;
 
-    Hexagon.prototype.setAdjacent = function(adjacent){
+    Box.prototype.setAdjacent = function(adjacent){
         this.adjacent = adjacent;
         this.drawShape();
     };
 
-    Hexagon.prototype.drawShape = function()
+    Box.prototype.drawShape = function()
     {
         this.graphics
             .beginFill(this.adjacent ? 'blue' : this.color)

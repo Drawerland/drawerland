@@ -2,13 +2,12 @@ var drawerland = drawerland || {};
 (function(){
     drawerland.Map = Map;
     var GridPosition = drawerland.GridPosition;
-    var Hexagon = drawerland.Hexagon;
+    var Box = drawerland.Box;
     var math = drawerland.math;
 
     function Map(grid){
         createjs.Container.call(this);
         this.grid = grid;
-        this.debug = false;
         this.drawShape();
     }
 
@@ -27,21 +26,21 @@ var drawerland = drawerland || {};
             : this.children[this.children.length-1].y + this.grid.offsetY;
     };
 
-    Map.prototype.getAdjacentHexagons = function(gridShape){
+    Map.prototype.getAdjacentBoxes = function(gridShape){
         var adjacents = [];
         for (var edge = 0; edge < 6; edge++) {
             var adjacentCoord = gridShape.position.getGridAdjacent(edge);
             if(adjacentCoord !== null) {
-                var adjacentHexagon = this.getGridHexagon(adjacentCoord.x, adjacentCoord.y);
-                if (adjacentHexagon !== null) {
-                    adjacents.push(adjacentHexagon);
+                var adjacentBox = this.getGridBox(adjacentCoord.x, adjacentCoord.y);
+                if (adjacentBox !== null) {
+                    adjacents.push(adjacentBox);
                 }
             }
         }
         return adjacents;
     };
 
-    Map.prototype.getGridHexagon = function(gridX, gridY){
+    Map.prototype.getGridBox = function(gridX, gridY){
         var index = math.gridToIndex(gridX, gridY, this.grid.lengthX);
         if (index >= 0 && typeof this.children[index] !== 'undefined') {
             return this.children[index];
@@ -52,11 +51,11 @@ var drawerland = drawerland || {};
     Map.prototype.drawShape = function(){
         for (var i=0; i < this.grid.lengthX * this.grid.lengthY; i++){
             var gridCoord = math.indexToGrid(i, this.grid.lengthX);
-            var hexagon = new Hexagon(new GridPosition(this.grid, gridCoord.x, gridCoord.y));
-            this.addChild(hexagon);
+            var box = new Box(new GridPosition(this.grid, gridCoord.x, gridCoord.y));
+            this.addChild(box);
 
             if(this.debug){
-                this.drawHexagonDebug(i, hexagon);
+                this.drawBoxDebug(i, box);
             }
         }
 
@@ -71,11 +70,11 @@ var drawerland = drawerland || {};
         this.addChild(layout);
     };
 
-    Map.prototype.drawHexagonDebug = function(index, hexagon){
-        var debugString = '#' + index + ':' + hexagon.gridX + ',' + hexagon.gridY;
-        var debugText = new createjs.Text(debugString, "12px Arial", "#ff7700");
-        debugText.x = hexagon.x - 27;
-        debugText.y = hexagon.y - 10;
-        this.addChild(debugText);
-    };
+    // Map.prototype.drawBoxDebug = function(index, box){
+    //     var debugString = '#' + index + ':' + box.gridX + ',' + box.gridY;
+    //     var debugText = new createjs.Text(debugString, "12px Arial", "#ff7700");
+    //     debugText.x = box.x - 27;
+    //     debugText.y = box.y - 10;
+    //     this.addChild(debugText);
+    // };
 })();
