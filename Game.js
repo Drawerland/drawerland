@@ -29,7 +29,7 @@ var drawerland = drawerland || {};
         this.addEventListener('click', function(event){
             if(event.target instanceof Box && event.target.adjacent){
                 self.setCharacterAdjacent(false);
-                self.character.moveTo(event.target.position);
+                self.character.moveTo(event.target.position.clone());
                 self.setCharacterAdjacent(true);
                 self.update();
             }

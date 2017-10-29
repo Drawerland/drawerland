@@ -24,4 +24,8 @@ var drawerland = drawerland || {};
     GridPosition.prototype.getIndex = function(){
         return math.gridToIndex(this.gridX, this.gridY, this.grid.lengthX);
     };
+
+    GridPosition.prototype.clone = function(){
+        return new GridPosition(this.grid, this.gridX, this.gridY);
+    };
 })();

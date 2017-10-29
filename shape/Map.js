@@ -51,12 +51,11 @@ var drawerland = drawerland || {};
     Map.prototype.drawShape = function(){
         for (var i=0; i < this.grid.lengthX * this.grid.lengthY; i++){
             var gridCoord = math.indexToGrid(i, this.grid.lengthX);
-            var box = new Box(new GridPosition(this.grid, gridCoord.x, gridCoord.y));
-            this.addChild(box);
-
-            if(this.debug){
-                this.drawBoxDebug(i, box);
-            }
+            this.addChild(
+                new Box(
+                    new GridPosition(this.grid, gridCoord.x, gridCoord.y)
+                )
+            );
         }
 
         var layout = new createjs.Shape();
