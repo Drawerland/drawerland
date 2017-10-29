@@ -3,7 +3,8 @@ var drawerland = drawerland || {};
 (function(){
     drawerland.Game = Game;
     var Grid = drawerland.Grid;
-    var HexagonalMap = drawerland.HexagonalMap;
+    var GridPosition = drawerland.GridPosition;
+    var Map = drawerland.Map;
     var Character = drawerland.Character;
     var Hexagon = drawerland.Hexagon;
 
@@ -13,10 +14,10 @@ var drawerland = drawerland || {};
         this.canvas.height = height || 800;
         createjs.Stage.call(this, this.canvas);
 
-        this.grid = new Grid(lengthX || 16, lengthY || 16, distance || 60);
+        this.grid = new Grid(lengthX || 32, lengthY || 32, distance || 30);
 
-        this.character = new Character(this.grid, 0, 0);
-        this.map = new HexagonalMap(this.grid);
+        this.character = new Character(new GridPosition(this.grid, 0, 0));
+        this.map = new Map(this.grid);
 
         this.addChild(this.map);
         this.addChild(this.character);
@@ -28,7 +29,7 @@ var drawerland = drawerland || {};
         this.addEventListener('click', function(event){
             if(event.target instanceof Hexagon && event.target.adjacent){
                 self.setCharacterAdjacent(false);
-                self.character.moveTo(event.target.gridX, event.target.gridY);
+                self.character.moveTo(event.target.position);
                 self.setCharacterAdjacent(true);
                 self.update();
             }

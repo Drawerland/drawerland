@@ -1,37 +1,36 @@
 var drawerland = drawerland || {};
 (function(){
-    drawerland.HexagonalMap = HexagonalMap;
+    drawerland.Map = Map;
+    var GridPosition = drawerland.GridPosition;
     var Hexagon = drawerland.Hexagon;
     var math = drawerland.math;
 
-    function HexagonalMap(grid){
+    function Map(grid){
         createjs.Container.call(this);
         this.grid = grid;
-        //@TODO we should be able to use this.children (from Container) instead of our own hexagons array
-        this.hexagons = [];
         this.debug = false;
         this.drawShape();
     }
 
-    HexagonalMap.prototype = Object.create(createjs.Container.prototype);
-    HexagonalMap.prototype.constructor = HexagonalMap;
+    Map.prototype = Object.create(createjs.Container.prototype);
+    Map.prototype.constructor = Map;
 
-    HexagonalMap.prototype.getWidth = function(){
-        return this.hexagons.length === 0
+    Map.prototype.getWidth = function(){
+        return this.children.length === 0
             ? 0
-            : this.hexagons[this.hexagons.length-1].x + this.grid.offsetX;
+            : this.children[this.children.length-1].x + this.grid.offsetX;
     };
 
-    HexagonalMap.prototype.getHeight = function(){
-        return this.hexagons.length === 0
+    Map.prototype.getHeight = function(){
+        return this.children.length === 0
             ? 0
-            : this.hexagons[this.hexagons.length-1].y + this.grid.offsetY;
+            : this.children[this.children.length-1].y + this.grid.offsetY;
     };
 
-    HexagonalMap.prototype.getAdjacentHexagons = function(gridShape){
+    Map.prototype.getAdjacentHexagons = function(gridShape){
         var adjacents = [];
         for (var edge = 0; edge < 6; edge++) {
-            var adjacentCoord = gridShape.getGridAdjacent(edge);
+            var adjacentCoord = gridShape.position.getGridAdjacent(edge);
             if(adjacentCoord !== null) {
                 var adjacentHexagon = this.getGridHexagon(adjacentCoord.x, adjacentCoord.y);
                 if (adjacentHexagon !== null) {
@@ -42,19 +41,18 @@ var drawerland = drawerland || {};
         return adjacents;
     };
 
-    HexagonalMap.prototype.getGridHexagon = function(gridX, gridY){
+    Map.prototype.getGridHexagon = function(gridX, gridY){
         var index = math.gridToIndex(gridX, gridY, this.grid.lengthX);
-        if (index >= 0 && typeof this.hexagons[index] !== 'undefined') {
-            return this.hexagons[index];
+        if (index >= 0 && typeof this.children[index] !== 'undefined') {
+            return this.children[index];
         }
         return null;
     };
 
-    HexagonalMap.prototype.drawShape = function(){
+    Map.prototype.drawShape = function(){
         for (var i=0; i < this.grid.lengthX * this.grid.lengthY; i++){
             var gridCoord = math.indexToGrid(i, this.grid.lengthX);
-            var hexagon = new Hexagon(this.grid, gridCoord.x, gridCoord.y);
-            this.hexagons.push(hexagon);
+            var hexagon = new Hexagon(new GridPosition(this.grid, gridCoord.x, gridCoord.y));
             this.addChild(hexagon);
 
             if(this.debug){
@@ -73,7 +71,7 @@ var drawerland = drawerland || {};
         this.addChild(layout);
     };
 
-    HexagonalMap.prototype.drawHexagonDebug = function(index, hexagon){
+    Map.prototype.drawHexagonDebug = function(index, hexagon){
         var debugString = '#' + index + ':' + hexagon.gridX + ',' + hexagon.gridY;
         var debugText = new createjs.Text(debugString, "12px Arial", "#ff7700");
         debugText.x = hexagon.x - 27;
