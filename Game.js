@@ -1,6 +1,6 @@
 var drawerland = drawerland || {};
 
-(function(){
+(function(Stage){
     drawerland.Game = Game;
     var Grid = drawerland.Grid;
     var GridPosition = drawerland.GridPosition;
