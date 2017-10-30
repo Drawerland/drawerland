@@ -13,7 +13,7 @@ var drawerland = drawerland || {};
         this.canvas = document.createElement('canvas');
         this.canvas.width = width || 800;
         this.canvas.height = height || 800;
-        createjs.Stage.call(this, this.canvas);
+        Stage.call(this, this.canvas);
 
         this.grid = new Grid(lengthX || 16, lengthY || 16, distance || 60);
 
