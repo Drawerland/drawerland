@@ -35,7 +35,7 @@ var drawerland = drawerland || {};
 
         if(this.adjacent && !this.blocking){
             this.graphics
-                .beginFill(Graphics.getRGB(200,200,200, 0.40))
+                .beginFill(Graphics.getRGB(0,0,0, 0.40))
                 .drawPolyStar(0,0, this.position.grid.offsetX, 6, 0, 30)
                 .endFill();
         }

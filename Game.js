@@ -8,8 +8,9 @@ var drawerland = drawerland || {};
     var Map = drawerland.Map;
     var Character = drawerland.Character;
     var Box = drawerland.Box;
+    var Hightlight = drawerland.Hightlight;
 
-    function Game(width, height, lengthX, lengthY, distance){
+    function Game(width, height, lengthX, lengthY, distance) {
         this.canvas = document.createElement('canvas');
         this.canvas.width = width || 800;
         this.canvas.height = height || 800;
@@ -17,7 +18,7 @@ var drawerland = drawerland || {};
 
         this.grid = new Grid(lengthX || 16, lengthY || 16, distance || 60);
 
-        var rockDecoration = new Decoration(this.grid, Decoration.types.IMAGE, 'asset/rock_60x60.jpg');
+        var rockDecoration = new Decoration(this.grid, Decoration.types.COLOR, '#724c05');
         var mapDescriptor = {
             '0,1': {
                 'decoration': rockDecoration,
@@ -39,7 +40,7 @@ var drawerland = drawerland || {};
         this.character = new Character(new GridPosition(this.grid, 0, 0));
         this.map = new Map(
             this.grid,
-            new Decoration(this.grid, Decoration.types.IMAGE, 'asset/grass_60x60.jpg'),
+            new Decoration(this.grid, Decoration.types.COLOR, '#ffffff'),
             mapDescriptor
         );
 
@@ -50,11 +51,16 @@ var drawerland = drawerland || {};
         this.update();
 
         var self = this;
+        this.hightlight = new Hightlight();
         this.addEventListener('click', function(event){
             if(event.target instanceof Box && event.target.adjacent && !event.target.blocking){
                 self.setCharacterAdjacent(false);
                 self.character.moveTo(event.target.position.clone());
                 self.setCharacterAdjacent(true);
+                self.update();
+            }//TODO put that in a moveover event
+            else if(event.target instanceof Box && !event.target.blocking){
+                self.hightlight.box(event.target,self.grid);
                 self.update();
             }
         });
