@@ -58,12 +58,16 @@ var drawerland = drawerland || {};
                 self.character.moveTo(event.target.position.clone());
                 self.setCharacterAdjacent(true);
                 self.update();
-            }//TODO put that in a moveover event
-            else if(event.target instanceof Box && !event.target.blocking){
+            }
+        });
+        this.enableMouseOver(20);
+        this.addEventListener("mouseover",function(event){
+            if(event.target instanceof Box && !event.target.blocking){
                 self.hightlight.box(event.target,self.grid);
                 self.update();
             }
-        });
+        })
+        createjs.Ticker.addEventListener("tick", this.hightlight.update);
     }
 
     Game.prototype = Object.create(Stage.prototype);

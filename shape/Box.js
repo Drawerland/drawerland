@@ -32,7 +32,12 @@ var drawerland = drawerland || {};
             .endStroke()
             .endFill();
 
-
+        if(this.hightlighted && !this.blocking){
+            this.graphics
+                .beginFill(Graphics.getRGB(241,196,15,0.40))
+                .drawPolyStar(0,0, this.position.grid.offsetX, 6, 0, 30)
+                .endFill();
+        }
         if(this.adjacent && !this.blocking){
             this.graphics
                 .beginFill(Graphics.getRGB(0,0,0, 0.40))
