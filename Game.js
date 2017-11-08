@@ -67,7 +67,10 @@ var drawerland = drawerland || {};
                 self.update();
             }
         })
-        createjs.Ticker.addEventListener("tick", this.hightlight.update);
+        createjs.Ticker.addEventListener("tick", function(event){
+            self.hightlight.update(event);
+            self.update();
+        });
     }
 
     Game.prototype = Object.create(Stage.prototype);
