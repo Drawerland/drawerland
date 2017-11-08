@@ -9,8 +9,8 @@ var drawerland = drawerland || {};
         this.hightlightedBox = [];
         const self = this;
         this.box = function (tile, grid) {
+            var d = new Date();
             if (!tile.hightlighted){
-                var d = new Date();
                 tile.hightlighted = true;
                 tile.hightlightExp = d.getTime() + 1000;
                 self.hightlightedBox.push(tile);
