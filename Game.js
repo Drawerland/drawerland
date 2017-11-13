@@ -52,9 +52,13 @@ var drawerland = drawerland || {};
         var self = this;
         this.addEventListener('click', function(event){
             if(event.target instanceof Box && event.target.adjacent && !event.target.blocking){
-                self.setCharacterAdjacent(false);
-                self.character.moveTo(event.target.position.clone());
-                self.setCharacterAdjacent(true);
+                //self.setCharacterAdjacent(false);
+                //self.character.moveTo(event.target.position.clone());
+                //self.setCharacterAdjacent(true);
+                event.target.select();
+
+
+
                 self.update();
             }
         });
@@ -64,7 +68,7 @@ var drawerland = drawerland || {};
                 event.target.hightlight(self);
                 self.update();
             }
-        })
+        });
     }
 
     Game.prototype = Object.create(Stage.prototype);

@@ -35,7 +35,17 @@ var drawerland = drawerland || {};
                 event.remove();
             });
         }
+    };
+
+    Box.prototype.select = function(){
+        this.selected = true;
+        this.drawShape();
     }
+    Box.prototype.unselect = function(){
+        this.selected = false;
+        this.drawShape();
+    }
+
 
 
     Box.prototype.setAdjacent = function(adjacent){
@@ -54,13 +64,19 @@ var drawerland = drawerland || {};
 
         if(this.hightlighted && !this.blocking){
             this.graphics
-                .beginFill(Graphics.getRGB(241,196,15,0.40))
+                .beginFill(Graphics.getRGB(255,200,0,0.40))
                 .drawPolyStar(0,0, this.position.grid.offsetX, 6, 0, 30)
                 .endFill();
         }
         if(this.adjacent && !this.blocking){
             this.graphics
                 .beginFill(Graphics.getRGB(0,0,0, 0.40))
+                .drawPolyStar(0,0, this.position.grid.offsetX, 6, 0, 30)
+                .endFill();
+        }
+        if(this.selected){
+            this.graphics
+                .beginFill(Graphics.getRGB(0,255,0, 0.40))
                 .drawPolyStar(0,0, this.position.grid.offsetX, 6, 0, 30)
                 .endFill();
         }
