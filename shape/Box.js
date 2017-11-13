@@ -11,12 +11,32 @@ var drawerland = drawerland || {};
         this.y = pixelCoordinates.y;
         this.decoration = description.decoration;
         this.adjacent = false;
+        this.selected = false;
+        this.hightlighted = false;
         this.blocking = description.blocking || false;
         this.drawShape();
     }
 
+
     Box.prototype = Object.create(Shape.prototype);
     Box.prototype.constructor = Box;
+
+
+
+    Box.prototype.hightlight = function(game,stat,addEvent){
+        stat = stat || !this.hightlighted;
+        this.hightlighted = stat;
+        this.drawShape();
+        var self = this;
+        if (addEvent){
+            this.addEventListener("mouseout",function(event){
+                self.hightlight(game,false);
+                game.update();
+                event.remove();
+            });
+        }
+    }
+
 
     Box.prototype.setAdjacent = function(adjacent){
         this.adjacent = adjacent;

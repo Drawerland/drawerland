@@ -8,7 +8,6 @@ var drawerland = drawerland || {};
     var Map = drawerland.Map;
     var Character = drawerland.Character;
     var Box = drawerland.Box;
-    var Hightlight = drawerland.Hightlight;
 
     function Game(width, height, lengthX, lengthY, distance) {
         this.canvas = document.createElement('canvas');
@@ -51,7 +50,6 @@ var drawerland = drawerland || {};
         this.update();
 
         var self = this;
-        this.hightlight = new Hightlight();
         this.addEventListener('click', function(event){
             if(event.target instanceof Box && event.target.adjacent && !event.target.blocking){
                 self.setCharacterAdjacent(false);
@@ -63,14 +61,10 @@ var drawerland = drawerland || {};
         this.enableMouseOver(20);
         this.addEventListener("mouseover",function(event){
             if(event.target instanceof Box && !event.target.blocking){
-                self.hightlight.box(event.target,self.grid);
+                event.target.hightlight(self);
                 self.update();
             }
         })
-        createjs.Ticker.addEventListener("tick", function(event){
-            self.hightlight.update(event);
-            self.update();
-        });
     }
 
     Game.prototype = Object.create(Stage.prototype);
