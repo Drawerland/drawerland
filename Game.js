@@ -8,6 +8,7 @@ var drawerland = drawerland || {};
     var Map = drawerland.Map;
     var Character = drawerland.Character;
     var Box = drawerland.Box;
+    var Keyboard = drawerland.Keyboard;
 
     function Game(width, height, lengthX, lengthY, distance) {
         this.canvas = document.createElement('canvas');
@@ -36,7 +37,7 @@ var drawerland = drawerland || {};
                 'blocking': true
             }
         };
-        this.character = new Character(new GridPosition(this.grid, 0, 0));
+        this.character = new Character(new GridPosition(this.grid, 1, 0));
         this.map = new Map(
             this.grid,
             new Decoration(this.grid, Decoration.types.COLOR, '#ffffff'),
@@ -55,6 +56,8 @@ var drawerland = drawerland || {};
                 //self.setCharacterAdjacent(false);
                 //self.character.moveTo(event.target.position.clone());
                 //self.setCharacterAdjacent(true);
+                array = self.map.getAdjacentBoxes(self.map.getGridBox(self.character.position.gridX,self.character.position.gridY));
+                for (var i = 0; i < array.length; i++) {array[i].unselect();}
                 event.target.select();
 
 
@@ -65,12 +68,17 @@ var drawerland = drawerland || {};
         this.enableMouseOver(20);
         this.addEventListener("mouseover",function(event){
             if(event.target instanceof Box && !event.target.blocking){
-                event.target.hightlight(self);
+                event.target.hightlight(self,true,true);
                 self.update();
             }
         });
-    }
 
+
+        this.keyboard = new Keyboard(this);
+        document.addEventListener("keydown",self.keyboard.eventExecuter);
+
+
+    }
     Game.prototype = Object.create(Stage.prototype);
     Game.prototype.constructor = Game;
 
