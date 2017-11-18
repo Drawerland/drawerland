@@ -7,13 +7,14 @@ var drawerland = drawerland || {};
         this.game = game;
         const self = this;
         this.eventExecuter = function(event){
+            event.preventDefault();
 
             function boxSelect(index){
-                var array = self.game.map.getAdjacentBoxes(self.game.map.getGridBox(self.game.character.position.gridX,self.game.character.position.gridY));
+                var charpos = self.game.character.position;
+                var array = self.game.map.getAdjacentBoxes(self.game.map.getGridBox(charpos.gridX,charpos.gridY));
                 if (index < array.length){
-                    if(!array[index].blocking && ~array.selected){
-                        for (var i = 0; i < array.length; i++) {array[i].unselect();}
-                        array[index].select();
+                    if(!array[index].blocking && !array[index].selected){
+                        self.game.map.selectBox({box:array[index]});
                     }
                 }
             }
@@ -34,6 +35,15 @@ var drawerland = drawerland || {};
             }
             else if(event.keyCode == 54) {//#6
                 boxSelect(5);
+            }
+            else if(event.keyCode == 32) {//Space
+                if (self.game.map.selected){
+                    self.game.setCharacterAdjacent(false);
+                    self.game.character.moveTo(self.game.map.selected.position.clone());
+                    self.game.map.resetSelectBox();
+                    self.game.setCharacterAdjacent(true);
+                }
+
             }
             self.game.update();
         }

@@ -10,6 +10,7 @@ var drawerland = drawerland || {};
         this.grid = grid;
         this.defaultDecoration = defaultDecoration;
         this.descriptor = descriptor || {};
+        this.selected = null;
         this.drawShape();
     }
 
@@ -41,6 +42,18 @@ var drawerland = drawerland || {};
         }
         return adjacents;
     };
+
+    Map.prototype.selectBox = function(obj){
+        box = obj.box || this.getGridBox(obj.gridX,obj.gridY);
+        try{this.selected.unselect()}catch(e){}
+        box.select();
+        this.selected = box;
+    }
+
+    Map.prototype.resetSelectBox = function(){
+        this.selected.unselect();
+        this.selected = null;
+    }
 
     Map.prototype.getDescription = function(gridX, gridY){
         var key = gridX+','+gridY;
