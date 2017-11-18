@@ -53,15 +53,7 @@ var drawerland = drawerland || {};
         var self = this;
         this.addEventListener('click', function(event){
             if(event.target instanceof Box && event.target.adjacent && !event.target.blocking){
-                //self.setCharacterAdjacent(false);
-                //self.character.moveTo(event.target.position.clone());
-                //self.setCharacterAdjacent(true);
-                array = self.map.getAdjacentBoxes(self.map.getGridBox(self.character.position.gridX,self.character.position.gridY));
-                for (var i = 0; i < array.length; i++) {array[i].unselect();}
-                event.target.select();
-
-
-
+                self.map.selectBox({box:event.target});
                 self.update();
             }
         });
